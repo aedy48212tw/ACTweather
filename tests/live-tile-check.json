@@ -1,0 +1,501 @@
+{
+  "checkedAt": "2026-10-10T09:43:32.370Z",
+  "client": "51.3.2.ind.81aa",
+  "method": "Pillow RGBA, official header decode, production CPU loader and sampler, independent bilinear reference",
+  "results": [
+    {
+      "layer": "visibility",
+      "url": "https://ims.windy.com/im/v3.0/forecast/ecmwf-hres/2026101000/2026101015/wm_grid_257/3/6/3/visibility-surface.jpg",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 44137,
+      "cors": "*",
+      "refTime": "2026101000",
+      "path": "2026101015",
+      "point": {
+        "name": "Taipei",
+        "lat": 25.038,
+        "lon": 121.514
+      },
+      "header": {
+        "decoderRmin": 90.9258804321289,
+        "decoderRstep": 278.5800700767368,
+        "decoderGmin": 0,
+        "decoderGstep": 0,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        19961.752534704676
+      ],
+      "value": 19961.752534704676
+    },
+    {
+      "layer": "visibility",
+      "url": "https://ims.windy.com/im/v3.0/forecast/ecmwf-hres/2026101000/2026101015/wm_grid_257/3/6/3/visibility-surface.jpg",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 44137,
+      "cors": "*",
+      "refTime": "2026101000",
+      "path": "2026101015",
+      "point": {
+        "name": "Offshore",
+        "lat": 25.5,
+        "lon": 122
+      },
+      "header": {
+        "decoderRmin": 90.9258804321289,
+        "decoderRstep": 278.5800700767368,
+        "decoderGmin": 0,
+        "decoderGstep": 0,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        28640.247409957272
+      ],
+      "value": 28640.247409957272
+    },
+    {
+      "layer": "deg0",
+      "url": "https://ims.windy.com/im/v3.0/forecast/ecmwf-hres/2026101000/2026101015/wm_grid_257/3/6/3/deg0-surface.jpg",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 21082,
+      "cors": "*",
+      "refTime": "2026101000",
+      "path": "2026101015",
+      "point": {
+        "name": "Taipei",
+        "lat": 25.038,
+        "lon": 121.514
+      },
+      "header": {
+        "decoderRmin": 3052.591796875,
+        "decoderRstep": 10.124086626838235,
+        "decoderGmin": 0,
+        "decoderGstep": 0,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        4874.482684386954
+      ],
+      "value": 4874.482684386954
+    },
+    {
+      "layer": "deg0",
+      "url": "https://ims.windy.com/im/v3.0/forecast/ecmwf-hres/2026101000/2026101015/wm_grid_257/3/6/3/deg0-surface.jpg",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 21082,
+      "cors": "*",
+      "refTime": "2026101000",
+      "path": "2026101015",
+      "point": {
+        "name": "Offshore",
+        "lat": 25.5,
+        "lon": 122
+      },
+      "header": {
+        "decoderRmin": 3052.591796875,
+        "decoderRstep": 10.124086626838235,
+        "decoderGmin": 0,
+        "decoderGstep": 0,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        4844.270529027607
+      ],
+      "value": 4844.270529027607
+    },
+    {
+      "layer": "turbulence",
+      "url": "https://ims.windy.com/im/v3.0/forecast/gfs/2026101000/2026101015/wm_grid_257/3/6/3/turbulence_max-850h-300h.png",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 48923,
+      "cors": "*",
+      "refTime": "2026101000",
+      "path": "2026101015",
+      "point": {
+        "name": "Taipei",
+        "lat": 25.038,
+        "lon": 121.514
+      },
+      "header": {
+        "decoderRmin": 2.3402910232543945,
+        "decoderRstep": 0.06823317209879558,
+        "decoderGmin": 0,
+        "decoderGstep": 0,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        10.234739490391792
+      ],
+      "value": 10.234739490391792
+    },
+    {
+      "layer": "turbulence",
+      "url": "https://ims.windy.com/im/v3.0/forecast/gfs/2026101000/2026101015/wm_grid_257/3/6/3/turbulence_max-850h-300h.png",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 48923,
+      "cors": "*",
+      "refTime": "2026101000",
+      "path": "2026101015",
+      "point": {
+        "name": "Offshore",
+        "lat": 25.5,
+        "lon": 122
+      },
+      "header": {
+        "decoderRmin": 2.3402910232543945,
+        "decoderRstep": 0.06823317209879558,
+        "decoderGmin": 0,
+        "decoderGstep": 0,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        7.800884844442663
+      ],
+      "value": 7.800884844442663
+    },
+    {
+      "layer": "wind",
+      "url": "https://ims.windy.com/im/v3.0/forecast/ecmwf-hres/2026101000/2026101015/wm_grid_257/3/6/3/wind-surface.jpg",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 37672,
+      "cors": "*",
+      "refTime": "2026101000",
+      "path": "2026101015",
+      "point": {
+        "name": "Taipei",
+        "lat": 25.038,
+        "lon": 121.514
+      },
+      "header": {
+        "decoderRmin": -11.638912200927734,
+        "decoderRstep": 0.07062667584886738,
+        "decoderGmin": -10.691460609436035,
+        "decoderGstep": 0.07138477774227367,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        -2.8424064919288066,
+        -0.77446557419724
+      ],
+      "value": {
+        "speed": 2.9460264070397746,
+        "dir": 74.75869469915705
+      }
+    },
+    {
+      "layer": "wind",
+      "url": "https://ims.windy.com/im/v3.0/forecast/ecmwf-hres/2026101000/2026101015/wm_grid_257/3/6/3/wind-surface.jpg",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 37672,
+      "cors": "*",
+      "refTime": "2026101000",
+      "path": "2026101015",
+      "point": {
+        "name": "Offshore",
+        "lat": 25.5,
+        "lon": 122
+      },
+      "header": {
+        "decoderRmin": -11.638912200927734,
+        "decoderRstep": 0.07062667584886738,
+        "decoderGmin": -10.691460609436035,
+        "decoderGstep": 0.07138477774227367,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        -4.740406011084606,
+        -5.79906699495796
+      ],
+      "value": {
+        "speed": 7.490035190967918,
+        "dir": 39.264036685281894
+      }
+    },
+    {
+      "layer": "waves",
+      "url": "https://ims.windy.com/im/v3.0/forecast/ecmwf-wam/2026101000/2026101015/wm_grid_257/3/6/3/waves-surface.png",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 66910,
+      "cors": "*",
+      "refTime": "2026101000",
+      "path": "2026101015",
+      "point": {
+        "name": "Taipei",
+        "lat": 25.038,
+        "lon": 121.514
+      },
+      "header": {
+        "decoderRmin": -11.845868110656738,
+        "decoderRstep": 0.08646588792987898,
+        "decoderGmin": -10.859844207763672,
+        "decoderGstep": 0.09889344234092563,
+        "decoderBmin": 0.019465314224362373,
+        "decoderBstep": 0.011836643363623058
+      },
+      "channels": [
+        -4.02733417428691,
+        -4.318940726643666,
+        1.0996337577353514
+      ],
+      "value": {
+        "height": 1.0996337577353514,
+        "dir": 42.998983800086535
+      }
+    },
+    {
+      "layer": "waves",
+      "url": "https://ims.windy.com/im/v3.0/forecast/ecmwf-wam/2026101000/2026101015/wm_grid_257/3/6/3/waves-surface.png",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 66910,
+      "cors": "*",
+      "refTime": "2026101000",
+      "path": "2026101015",
+      "point": {
+        "name": "Offshore",
+        "lat": 25.5,
+        "lon": 122
+      },
+      "header": {
+        "decoderRmin": -11.845868110656738,
+        "decoderRstep": 0.08646588792987898,
+        "decoderGmin": -10.859844207763672,
+        "decoderGstep": 0.09889344234092563,
+        "decoderBmin": 0.019465314224362373,
+        "decoderBstep": 0.011836643363623058
+      },
+      "channels": [
+        -6.395087161965744,
+        -3.7376808747371366,
+        1.5242407144381585
+      ],
+      "value": {
+        "height": 1.5242407144381585,
+        "dir": 59.69536740023625
+      }
+    },
+    {
+      "layer": "currents",
+      "url": "https://ims.windy.com/im/v3.0/forecast/cmems/2026100900/2026101015/wm_grid_257/3/6/3/seacurrents-surface.jpg",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 34246,
+      "cors": "*",
+      "refTime": "2026100900",
+      "path": "2026101015",
+      "point": {
+        "name": "Taipei",
+        "lat": 25.038,
+        "lon": 121.514
+      },
+      "header": {
+        "decoderRmin": -1.4476392269134521,
+        "decoderRstep": 0.010771596197988472,
+        "decoderGmin": -1.5216302871704102,
+        "decoderGstep": 0.010573779835420497,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        -0.02391513568559845,
+        -0.09262198035208172
+      ],
+      "value": {
+        "speed": 0.09565963077078019,
+        "dir": 194.47765322185813
+      }
+    },
+    {
+      "layer": "currents",
+      "url": "https://ims.windy.com/im/v3.0/forecast/cmems/2026100900/2026101015/wm_grid_257/3/6/3/seacurrents-surface.jpg",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 34246,
+      "cors": "*",
+      "refTime": "2026100900",
+      "path": "2026101015",
+      "point": {
+        "name": "Offshore",
+        "lat": 25.5,
+        "lon": 122
+      },
+      "header": {
+        "decoderRmin": -1.4476392269134521,
+        "decoderRstep": 0.010771596197988472,
+        "decoderGmin": -1.5216302871704102,
+        "decoderGstep": 0.010573779835420497,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        -0.10458377344177544,
+        0.08205436267137144
+      ],
+      "value": {
+        "speed": 0.1329311254023134,
+        "dir": 308.11703019774086
+      }
+    },
+    {
+      "layer": "sst",
+      "url": "https://ims.windy.com/im/v3.0/analysis/ecmwf-hres/2026101000/2026101000/wm_grid_257/3/6/3/sst-surface.jpg",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 30888,
+      "cors": "*",
+      "refTime": "2026101000",
+      "path": "2026101000",
+      "point": {
+        "name": "Taipei",
+        "lat": 25.038,
+        "lon": 121.514
+      },
+      "header": {
+        "decoderRmin": 278.32135009765625,
+        "decoderRstep": 0.10863994523590687,
+        "decoderGmin": 0,
+        "decoderGstep": 0,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        299.94179010050675
+      ],
+      "value": 26.791790100506773
+    },
+    {
+      "layer": "sst",
+      "url": "https://ims.windy.com/im/v3.0/analysis/ecmwf-hres/2026101000/2026101000/wm_grid_257/3/6/3/sst-surface.jpg",
+      "status": 200,
+      "size": [
+        257,
+        265
+      ],
+      "bytes": 30888,
+      "cors": "*",
+      "refTime": "2026101000",
+      "path": "2026101000",
+      "point": {
+        "name": "Offshore",
+        "lat": 25.5,
+        "lon": 122
+      },
+      "header": {
+        "decoderRmin": 278.32135009765625,
+        "decoderRstep": 0.10863994523590687,
+        "decoderGmin": 0,
+        "decoderGstep": 0,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        299.27596555913345
+      ],
+      "value": 26.125965559133476
+    },
+    {
+      "layer": "turbulence-ecmwf",
+      "url": "https://ims.windy.com/im/v3.0/forecast/ecmwf-hres/2026101000/2026101015/wm_grid_257/3/6/3/turbulence_max-850h-300h.png",
+      "status": 200,
+      "refTime": "2026101000",
+      "path": "2026101015",
+      "point": {
+        "name": "Taipei",
+        "lat": 25.038,
+        "lon": 121.514
+      },
+      "header": {
+        "decoderRmin": 2.216059446334839,
+        "decoderRstep": 0.10586792908462823,
+        "decoderGmin": 0,
+        "decoderGstep": 0,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        10.625691340457504
+      ],
+      "value": 10.625691340457504
+    },
+    {
+      "layer": "turbulence-ecmwf",
+      "url": "https://ims.windy.com/im/v3.0/forecast/ecmwf-hres/2026101000/2026101015/wm_grid_257/3/6/3/turbulence_max-850h-300h.png",
+      "status": 200,
+      "refTime": "2026101000",
+      "path": "2026101015",
+      "point": {
+        "name": "Offshore",
+        "lat": 25.5,
+        "lon": 122
+      },
+      "header": {
+        "decoderRmin": 2.216059446334839,
+        "decoderRstep": 0.10586792908462823,
+        "decoderGmin": 0,
+        "decoderGstep": 0,
+        "decoderBmin": 0,
+        "decoderBstep": 0
+      },
+      "channels": [
+        7.946595130277884
+      ],
+      "value": 7.946595130277884
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {normalise,metar,windCode,astronomy,fmt,clock} from '../src/core.mjs';import {fixture} from './fixture.mjs';
+const t=Date.parse('2026-10-06T03:00:00Z');
+test('Windy v3 K/Pa/m/s values and summary converted',()=>{const w=normalise(fixture(),t);assert.equal(w.temp,17.850000000000023);assert.equal(w.pressure,1012);assert.equal(w.max,19);assert.equal(w.min,14);assert.equal(w.dew,10);assert.equal(w.humidity,72);});
+test('local calendar groups rows and precip per segment',()=>{const w=normalise(fixture(),t);assert.equal(w.rows.length,6);assert.equal(w.rainDaily,3.3);});
+test('below-terrain 925 hPa excluded at Leshan',()=>{const w=normalise(fixture(),t);assert.equal(w.levels.length,1);assert.equal(w.levels[0].level,'700h');});
+test('timestamp outside range rejected',()=>assert.throws(()=>normalise(fixture(),t+20*86400000),/超出/));
+test('malformed data rejected',()=>assert.throws(()=>normalise({},t),/data.ts/));
+test('missing series never become zero',()=>{const p=fixture();delete p.data.temperature;delete p.data.wind;delete p.meteogram;const w=normalise(p,t);assert.equal(w.temp,undefined);assert.equal(w.dew,undefined);assert.equal(fmt(w.temp),'未提供');assert.match(metar(w),/\/\/\/\/\/KT/);});
+test('wind meteorological true direction and calm',()=>{assert.equal(windCode(3.6,270),'27007KT');assert.equal(windCode(0,270),'00000KT');assert.equal(windCode(3.6,0),'36007KT');assert.equal(windCode(3.6,null),'///07KT');});
+test('METAR UTC, automatic model pressure, estimated cloud groups, unknown visibility, no NOSIG',()=>{const code=metar(normalise(fixture(),t));assert.match(code,/060300Z 27007KT \/\/\/\/ BKN080 18\/10 Q1012/);assert.match(code,/A2988/);assert.match(code,/Q_FROM_MODEL_PRESSURE/);assert.doesNotMatch(code,/NOSIG|CAVOK/);});
+test('manual QNH/visibility/clouds checked and coded',()=>{const code=metar(normalise(fixture(),t),{qnh:1012,visibility:7050,clouds:'FEW016 BKN100'});assert.match(code,/7000 FEW016 BKN100 18\/10 Q1012/);assert.match(code,/A2988/);});
+test('invalid manual inputs omitted',()=>{const code=metar(normalise(fixture(),t),{qnh:5,visibility:-1,clouds:'<script>'});assert.match(code,/Q1012/);assert.doesNotMatch(code,/<script>/);});
+test('negative temperature encoded with M',()=>{const w=normalise(fixture(),t);w.temp=-3;w.dew=-7;assert.match(metar(w),/M03\/M07/);});
+test('sun/moon and Chinese calendar calculated at UTC+8',()=>{const a=astronomy('2026-10-06',28800,24.4983161,121.070793);assert.match(a.sun,/\d{2}:\d{2} – \d{2}:\d{2}/);assert.match(a.moon,/農曆/);assert.equal(clock(t,28800),'11:00');});

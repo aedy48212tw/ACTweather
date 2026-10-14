@@ -1,0 +1,28 @@
+{
+  "name": "windy-plugin-actweather",
+  "version": "0.1.12",
+  "description": "ACTweather single point forecast",
+  "main": "dist/plugin.min.js",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "rollup -w -c",
+    "test": "node --test tests/*.test.mjs",
+    "pretest": "npm run build"
+  },
+  "keywords": [
+    "windy",
+    "windy.com",
+    "plugins"
+  ],
+  "author": "航空技術學院 陳智羿老師",
+  "license": "ISC",
+  "homepage": "https://docs.windy-plugins.com/",
+  "dependencies": {
+    "@windycom/plugin-devtools": "^3.0.3",
+    "suncalc": "^2.1.1"
+  },
+  "devDependencies": {
+    "jsdom": "30.1.2"
+  }
+}

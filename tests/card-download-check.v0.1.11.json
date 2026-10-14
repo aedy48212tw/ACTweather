@@ -1,0 +1,118 @@
+{
+  "passed": true,
+  "input": "Uploaded reference screenshots, not a fresh Windy capture",
+  "checks": [
+    {
+      "mode": "desktop",
+      "width": 2400,
+      "height": 1700,
+      "pngBytes": [
+        1282531,
+        1654492
+      ],
+      "saved": [
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_兩張預報圖卡.zip",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_01_氣象.png",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_02_海象電碼.png"
+      ],
+      "shareFiles": 2
+    },
+    {
+      "mode": "mobile",
+      "width": 2400,
+      "height": 1700,
+      "pngBytes": [
+        1282531,
+        1654492
+      ],
+      "saved": [
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_兩張預報圖卡.zip",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_01_氣象.png",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_02_海象電碼.png"
+      ],
+      "shareFiles": 2
+    },
+    {
+      "mode": "styled",
+      "width": 2400,
+      "height": 1999,
+      "pngBytes": [
+        1481771,
+        1929692
+      ],
+      "saved": [
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_兩張預報圖卡.zip",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_01_氣象.png",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_02_海象電碼.png"
+      ],
+      "shareFiles": 2
+    },
+    {
+      "mode": "transparent",
+      "width": 2400,
+      "height": 1700,
+      "pngBytes": [
+        1189275,
+        1528954
+      ],
+      "saved": [
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_兩張預報圖卡.zip",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_01_氣象.png",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_02_海象電碼.png"
+      ],
+      "shareFiles": 2
+    },
+    {
+      "mode": "cancel",
+      "cancelled": true
+    }
+  ],
+  "automatic_downloads_before_preview": 0,
+  "background_corners_preserved": {
+    "1": [
+      [
+        255,
+        0,
+        0
+      ],
+      [
+        0,
+        255,
+        0
+      ],
+      [
+        0,
+        0,
+        255
+      ],
+      [
+        255,
+        255,
+        0
+      ]
+    ],
+    "2": [
+      [
+        255,
+        0,
+        0
+      ],
+      [
+        0,
+        255,
+        0
+      ],
+      [
+        0,
+        0,
+        255
+      ],
+      [
+        255,
+        255,
+        0
+      ]
+    ]
+  },
+  "indexeddb_background_favorite_save_apply": true
+}

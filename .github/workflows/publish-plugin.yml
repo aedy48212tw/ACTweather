@@ -1,0 +1,38 @@
+# Adapted from windycom/windy-plugin-template publishing workflow (2026-10-13).
+name: publish-plugin
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  publish-plugin:
+    runs-on: ubuntu-latest
+    env:
+      WINDY_API_KEY: '${{ secrets.WINDY_API_KEY }}'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Build and test
+        run: |
+          npm ci
+          npm test
+      - name: Prepare plugin archive
+        env:
+          ACT_REPOSITORY: '${{ github.repository }}'
+          ACT_COMMIT: '${{ github.sha }}'
+          ACT_OWNER: '${{ github.repository_owner }}'
+        run: |
+          node scripts/prepare-publish.mjs
+          tar -cf plugin.tar -C dist .
+      - name: Publish Plugin
+        run: |
+          if [ -z "$WINDY_API_KEY" ]; then
+            echo "Secret WINDY_API_KEY is not configured" >&2
+            exit 1
+          fi
+          curl -sS --fail-with-body -X POST 'https://node.windy.com/plugins/v1.0/upload' \
+            -H "x-windy-api-key: ${WINDY_API_KEY}" \
+            -F 'plugin_archive=@plugin.tar'
