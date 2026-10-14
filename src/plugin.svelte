@@ -73,4 +73,5 @@
  :global(.actweather .act-export-progress){position:fixed;inset:0;z-index:100000;background:rgba(20,27,36,.94);color:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:24px;text-align:center;}
  :global(.actweather [data-card-results] a){color:var(--accent);display:inline-block;margin:10px;}
  :global(.actweather [role=alert]){color:#fb847c;}
+:global(.actweather .act-language-row){display:flex;align-items:center;flex-wrap:wrap;gap:8px}:global(.actweather .act-language){font-size:12px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}:global(.actweather .act-language input){width:auto}
 </style>

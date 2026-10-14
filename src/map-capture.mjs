@@ -13,10 +13,18 @@ export const cardProducts=[
 ];
 const clone=x=>x==null?x:JSON.parse(JSON.stringify(x));
 export function cardBounds(point,range=2){range=screenshotRange(range);if(!Number.isFinite(point.lat)||!Number.isFinite(point.lon)||Math.abs(point.lat)>90||Math.abs(point.lon)>180)throw Error('圖卡地點無效');if(Math.abs(point.lat)+range>85.05112878)throw Error('此極區無法完整擷取所設定範圍的Mercator地圖');return [[point.lon-range,point.lat-range],[point.lon+range,point.lat+range]];}
-export function cropRectangle(gl,canvas,bounds){const [nw,se]=[gl.project([bounds[0][0],bounds[1][1]]),gl.project([bounds[1][0],bounds[0][1]])];const size=gl.getContainer().getBoundingClientRect(),sx=canvas.width/size.width,sy=canvas.height/size.height;const r={x:nw.x*sx,y:nw.y*sy,width:(se.x-nw.x)*sx,height:(se.y-nw.y)*sy};if(!Object.values(r).every(Number.isFinite)||r.width<2||r.height<2||r.x<-.5||r.y<-.5||r.x+r.width>canvas.width+.5||r.y+r.height>canvas.height+.5)throw Error('指定範圍未完整呈現在地圖中');return r;}
+export function cropRectangle(gl,canvas,bounds){const [nw,se]=[gl.project([bounds[0][0],bounds[1][1]]),gl.project([bounds[1][0],bounds[0][1]])];const container=gl.getContainer(),size=container.getBoundingClientRect(),width=canvas.clientWidth||container.clientWidth||size.width,height=canvas.clientHeight||container.clientHeight||size.height,sx=canvas.width/width,sy=canvas.height/height;const r={x:nw.x*sx,y:nw.y*sy,width:(se.x-nw.x)*sx,height:(se.y-nw.y)*sy};if(!Object.values(r).every(Number.isFinite)||r.width<2||r.height<2||r.x<-.5||r.y<-.5||r.x+r.width>canvas.width+.5||r.y+r.height>canvas.height+.5)throw Error('指定範圍未完整呈現在地圖中');return r;}
 // Windy 51.x public MapLibre style layers expose their custom implementation.
 // Its switchable cache must have switched AND every renderable tile must be valid.
 // redrawFinished alone also fires when renderer parameters change, before tiles load.
+export function fitCaptureBounds(gl,bounds,attempt=0){
+ gl.stop?.();gl.resize?.();gl.setPadding?.({top:0,bottom:0,left:0,right:0});
+ const options={padding:24+attempt*16,duration:0,bearing:0,pitch:0,offset:[0,0],retainPadding:false};
+ // cameraForBounds can carry previous host padding on mobile unless it is reset first.
+ const camera=gl.cameraForBounds?.(bounds,options);
+ if(camera)gl.jumpTo({...camera,bearing:0,pitch:0,padding:{top:0,bottom:0,left:0,right:0},retainPadding:false});
+ else gl.fitBounds(bounds,options);
+}
 export function weatherCanvasReady(gl,overlay,product){
  const implementation=(gl.getLayersOrder?.()??[]).map(id=>gl.getLayer(id)?.implementation).find(layer=>layer?.switchableCache);
  if(!implementation)throw Error('Windy氣象圖層截圖介面不可用，請更新Windy後重試');
@@ -39,10 +47,17 @@ export function createWindyCapture({store,bcast,map,products,legendAPI,document:
   async function set(key,value){if(value!==undefined)await store.set(key,value);}
   function check(){if(controller.signal.aborted)throw Error('已取消圖卡下載');}
   function renderCrop(item,sourceModel){return new Promise((resolve,reject)=>{
-   let timer;const done=(error,value)=>{clearTimeout(timer);gl.off('render',render);controller.signal.removeEventListener('abort',cancel);error?reject(error):resolve(value);};
+   let timer,fitAttempts=0,settled=0;const done=(error,value)=>{clearTimeout(timer);gl.off('render',render);controller.signal.removeEventListener('abort',cancel);error?reject(error):resolve(value);};
    const cancel=()=>done(Error('已取消圖卡下載'));
    const render=()=>{try{check();if(gl.areTilesLoaded?.()===false||gl.isStyleLoaded?.()===false||!weatherCanvasReady(gl,item.overlay,sourceModel))return;
-    const original=gl.getCanvas(),r=cropRectangle(gl,original,bounds),canvas=doc.createElement('canvas');
+    const original=gl.getCanvas();let r;
+    try{r=cropRectangle(gl,original,bounds);}catch(error){
+     if(fitAttempts++>=4)throw error;
+     fitCaptureBounds(gl,bounds,fitAttempts);settled=0;gl.triggerRepaint();return;
+    }
+    // Host resize/progress updates can race with the first render. Require another stable frame.
+    if(settled++===0){gl.triggerRepaint();return;}
+    const canvas=doc.createElement('canvas');
     // Bound memory on mobile; no change to the geographic crop.
     const scale=Math.min(1,900/Math.max(r.width,r.height));canvas.width=Math.max(1,Math.round(r.width*scale));canvas.height=Math.max(1,Math.round(r.height*scale));
     const ctx=canvas.getContext('2d',{willReadFrequently:true});if(!ctx)throw Error('瀏覽器無法建立圖卡畫布');
@@ -65,11 +80,11 @@ export function createWindyCapture({store,bcast,map,products,legendAPI,document:
     bcast.on('redrawFinished',loaded);controller.signal.addEventListener('abort',cancel,{once:true});timer=setTimeout(()=>finish(Error(item.label+'圖層載入逾時')),timeoutMs);
     if(controller.signal.aborted)cancel();
    });ready.catch(()=>{});
-   try{check();await set('overlay',item.overlay);await set('product',sourceModel);await set('level','surface');await set('timestamp',snapshot.timestamp);if(item.overlay!=='sst'&&store.get('timestamp')!==snapshot.timestamp)throw Error(item.label+'預報時間被Windy調整，請更換時間後重試');await set('acRange',3);await set('isolinesOn',false);bcast.emit('redrawLayers',{noCache:false});await ready;check();return await renderCrop(item,sourceModel);}catch(error){cleanup?.();throw error;}
+   try{check();await set('overlay',item.overlay);await set('product',sourceModel);await set('level','surface');await set('timestamp',snapshot.timestamp);if(item.overlay!=='sst'&&store.get('timestamp')!==snapshot.timestamp)throw Error(item.label+'預報時間被Windy調整，請更換時間後重試');await set('acRange',3);await set('isolinesOn',false);bcast.emit('redrawLayers',{noCache:false});await ready;check();fitCaptureBounds(gl,bounds);return await renderCrop(item,sourceModel);}catch(error){cleanup?.();throw error;}
   }
   try{
    check();await set('animation',false);if(projection?.type&&projection.type!=='mercator')gl.setProjection({type:'mercator'});
-   gl.fitBounds(bounds,{padding:16,duration:0,bearing:0,pitch:0});
+   fitCaptureBounds(gl,bounds);
    for(let i=0;i<cardProducts.length;i++){
     check();const item=cardProducts[i],sourceModel=item.candidates(snapshot.model).find(m=>products?.[m]?.overlays?.includes(item.overlay));
     if(!sourceModel)throw Error('Windy未提供'+item.label+'圖層');

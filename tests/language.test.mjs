@@ -1,0 +1,12 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {JSDOM} from 'jsdom';import {mountACT} from '../src/app.mjs';import {fixture} from './fixture.mjs';import {english,translateOwned} from '../src/language.mjs';import {cardFileNames} from '../src/forecast-cards.mjs';
+const wait=()=>new Promise(r=>setTimeout(r,150));
+test('English switch translates all tabs, sources, design and copied forecast; persists and preserves user text',async()=>{
+ const dom=new JSDOM('<main></main>',{url:'https://www.windy.com'}),root=dom.window.document.querySelector('main');let copied='';const api={storage:dom.window.localStorage,model:()=> 'ecmwf',time:()=>Date.parse('2026-10-06T03:00Z'),timeOffset:()=>28800,forecast:async()=>fixture(),copy:async x=>copied=x,subscribe:()=>()=>{},visibility:async()=>15300};let app=mountACT(root,api);
+ try{await wait();const checkbox=root.querySelector('[data-setting=english]');assert.equal(checkbox.closest('header')!==null,true);checkbox.checked=true;checkbox.dispatchEvent(new dom.window.Event('change'));assert.equal(root.lang,'en');assert.match(root.textContent,/ACT Forecast/);assert.match(root.textContent,/CWA Taipei Weather Station/);
+  for(const tab of [0,1,2]){root.querySelector(`[data-tab="${tab}"]`).click();await wait();assert.doesNotMatch(root.textContent,/[\u3400-\u9fff]/);root.querySelector('[data-action=copy]').click();await wait();assert.doesNotMatch(copied,/[\u3400-\u9fff]/);}
+  root.querySelector('[data-tab="0"]').click();app.select({lat:23,lon:120},'我自訂的地點');await wait();await wait();assert.match(root.textContent,/我自訂的地點/);root.querySelector('[data-action=copy]').click();await wait();assert.match(copied,/我自訂的地點/);
+  app.destroy();app=mountACT(root,api);await wait();assert.equal(app.state.english,true);assert.match(root.textContent,/Forecast Time/);
+  const cb=root.querySelector('[data-setting=english]');cb.checked=false;cb.dispatchEvent(new dom.window.Event('change'));assert.match(root.textContent,/ACT 預報/);
+ }finally{app.destroy();dom.window.close();}
+});
+test('English meteorological terminology, 16 directions and user notes remain correct',()=>{assert.equal(english('陰天有雷雨；中雷雨；東北風（54°）；15.3公里'),'Overcast with thunderstorm rain; Moderate thunderstorm rain; NE wind (54°); 15.3 km');assert.match(english('西南方來浪（220°）；流向北北東方（20°）；3 級'),/from SW.*Flow towards NNE.*Beaufort 3/);assert.equal(translateOwned('地點：我自訂的地點','en',['我自訂的地點']),'Location: 我自訂的地點');assert.match(cardFileNames('Taipei',0,'en').images[1],/Marine_METAR/);});

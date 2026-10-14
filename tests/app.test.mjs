@@ -9,10 +9,10 @@ test('backend failure disables copy and shows actionable error',async()=>{const 
 test('stale response cannot overwrite newer point',async()=>{let resolvers=[];const s=setup({forecast:()=>new Promise(r=>resolvers.push(r))});try{s.app.select({lat:23,lon:121});await tick();resolvers[1](fixture());await tick();const stale=fixture();stale.data.temperature=stale.data.temperature.map(()=>350);resolvers[0](stale);await tick();assert.doesNotMatch(s.root.textContent,/76.9 °C/);assert.match(s.root.textContent,/23.0000000/);}finally{s.app.destroy();}});
 test('destroy unsubscribes and clears rendered DOM',async()=>{let cleaned=false;const s=setup({subscribe:()=>()=>{cleaned=true;}});s.app.destroy();await tick();assert.ok(cleaned);assert.equal(s.root.textContent,'');});
 test('out-of-range time can recover when timeline returns',async()=>{const s=setup();try{await tick();s.setTime(Date.parse('2026-11-06T03:00:00Z'));assert.match(s.root.textContent,/超出/);s.setTime(Date.parse('2026-10-06T03:00:00Z'));assert.equal(s.root.querySelector('[role=alert]'),null);assert.match(s.root.textContent,/19.0 °C/);}finally{s.app.destroy();}});
-test('v0.1.12 fields rendered and included in copied ACT forecast',async()=>{
+test('v0.1.13 fields rendered and included in copied ACT forecast',async()=>{
  const p=fixture();p.header.model='gfs';const s=setup({forecast:async()=>p});
  try{await tick();s.setTime(Date.parse('2026-10-06T15:00Z'));
- assert.match(s.root.textContent,/v0.1.12/);
+ assert.match(s.root.textContent,/v0.1.13/);
  assert.match(s.root.textContent,/2026-10-06 23:00\(LST地方時\)；2026-10-06 15:00 \(UTC\)/);
  assert.match(s.root.textContent,/參考模式GFS/);
  assert.match(s.root.textContent,/A2988（29.88 inHg）/);

@@ -1,15 +1,6 @@
 {
+  "version": "0.1.13",
   "passed": true,
-  "mode": "local dry run only, no HTTP upload",
-  "version": "0.1.12",
-  "private": false,
-  "archive_files": [
-    ".",
-    "./plugin.js.map",
-    "./plugin.min.js",
-    "./plugin.js",
-    "./package.json",
-    "./plugin.json"
-  ],
-  "bytes": 993280
+  "mode": "local metadata and archive check only; not uploaded",
+  "repository": "https://github.com/aedy48212tw/ACTweather"
 }

@@ -1,13 +1,14 @@
+import {translateOwned} from './language.mjs';
 import {cardStyle} from './card-style.mjs';
 import {clock} from './core.mjs';
 export const safeName=name=>String(name||'指定地點').replace(/[\\/:*?"<>|\x00-\x1f]/g,'_').slice(0,60);
-export const cardFileNames=(name,ts)=>{const base='ACTweather_'+safeName(name)+'_'+new Date(ts).toISOString().slice(0,16).replace(/[-:T]/g,'')+'UTC';return {images:[base+'_01_氣象.png',base+'_02_海象電碼.png'],zip:base+'_兩張預報圖卡.zip'};};
+export const cardFileNames=(name,ts,language='zh')=>{const base='ACTweather_'+safeName(name)+'_'+new Date(ts).toISOString().slice(0,16).replace(/[-:T]/g,'')+'UTC';return language==='en'?{images:[base+'_01_Weather.png',base+'_02_Marine_METAR.png'],zip:base+'_Forecast_Cards.zip'}:{images:[base+'_01_氣象.png',base+'_02_海象電碼.png'],zip:base+'_兩張預報圖卡.zip'};};
 export function wrapLines(ctx,text,width){const result=[];for(const row of String(text).split('\n')){let line='';for(const char of Array.from(row)){if(line&&ctx.measureText(line+char).width>width){result.push(line);line=char;}else line+=char;}result.push(line);}return result;}
 function blobOf(canvas){return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('圖卡PNG編碼失敗')),'image/png'));}
 export const coordinateLabel=(value,lat=false)=>`${Math.abs(lat?value:((value+180)%360+360)%360-180).toFixed(2)}°${(lat?value:((value+180)%360+360)%360-180)<0?(lat?'S':'W'):(lat?'N':'E')}`;
 function textLayout(ctx,rows,width,style,initial='act'){
  let section=initial;const out=[];
- for(const row of rows){if(row==='海象預報')section='marine';if(row==='METAR預報電碼')section='metar';const size=style[section+'Font'];const title=['ACT預報','海象預報','METAR預報電碼'].includes(row);const label=String(row).match(/^\d+\.[^：\n]+：/)?.[0]??'';const text=String(row);let current=[],lineWidth=0;
+ for(const row of rows){if(['海象預報','Marine Forecast'].includes(row))section='marine';if(['METAR預報電碼','Forecast METAR Code'].includes(row))section='metar';const size=style[section+'Font'];const title=['ACT預報','海象預報','METAR預報電碼','ACT Forecast','Marine Forecast','Forecast METAR Code'].includes(row);const label=String(row).match(/^\d+\.[^：:\n]+[：:]/)?.[0]??'';const text=String(row);let current=[],lineWidth=0;
   for(const [index,char] of Array.from(text).entries()){
    if(char==='\n'){out.push({runs:current,size});current=[];lineWidth=0;continue;}
    const bold=style.boldTitles&&(title||index<label.length);ctx.font=`${bold?'bold ':''}${size}px sans-serif`;const w=ctx.measureText(char).width;
@@ -25,21 +26,21 @@ function drawLegend(ctx,legend,x,y,w){
 }
 export async function composeCards(snapshot,capture,{document:doc=globalThis.document}={}){
  if(capture.images?.length!==8)throw Error('需完整取得八張Windy圖層截圖');await doc.fonts?.ready;
- const style=cardStyle(snapshot.style),width=2400,pad=52+style.borderWidth*2,rightX=1260,rightW=width-rightX-pad;
+ const t=text=>translateOwned(text,snapshot.language,[snapshot.point.name]),style=cardStyle(snapshot.style),width=2400,pad=52+style.borderWidth*2,rightX=1260,rightW=width-rightX-pad;
  const measure=doc.createElement('canvas').getContext('2d');if(!measure)throw Error('瀏覽器無法建立圖卡');
- const groups=[snapshot.act,snapshot.second],rows=groups.map(r=>textLayout(measure,r,rightW,style));
+ const groups=[snapshot.act.map(t),snapshot.second.map(t)],rows=groups.map(r=>textLayout(measure,r,rightW,style));
  measure.font=`${style.noteStyle==='normal'?'':style.noteStyle+' '}${style.noteSize}px sans-serif`;
  const note=style.note?wrapLines(measure,style.note,style.notePosition==='right'?rightW:width-pad*2):[];
  const noteH=note.length*Math.ceil(style.noteSize*1.35)+(note.length?20:0),headerY=Math.max(64,style.border==='none'?64:style.borderWidth*4+62),top=headerY+90+(style.notePosition==='top'?noteH:0),footerSpace=100+(style.notePosition==='bottom'?noteH:0)+pad;
  const textH=r=>r.reduce((a,b)=>a+Math.ceil(b.size*1.32),0);
  const height=Math.ceil(Math.max(1700,top+Math.max(...rows.map(textH))+(style.notePosition==='right'?noteH:0)+footerSpace));if(height>4800)throw Error('文字與字級超出圖卡限制，請減少文字或縮小字級');
- const result=[],names=cardFileNames(snapshot.point.name,snapshot.timestamp);
+ const result=[],names=cardFileNames(t(snapshot.point.name),snapshot.timestamp,snapshot.language);
  try{for(let page=0;page<2;page++){
   const canvas=doc.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');if(!ctx)throw Error('瀏覽器無法建立圖卡');
   ctx.globalAlpha=style.backgroundOpacity/100;let fill=style.background;if(style.gradient){fill=ctx.createLinearGradient(0,0,width,height);fill.addColorStop(0,style.background);fill.addColorStop(1,style.background2);}ctx.fillStyle=fill;ctx.fillRect(0,0,width,height);ctx.globalAlpha=1;
   if(snapshot.backgroundImage){const image=snapshot.backgroundImage;ctx.save();ctx.globalAlpha=style.imageOpacity/100;ctx.drawImage(image,0,0,width,height);ctx.restore();}
-  ctx.fillStyle=style.textColor;ctx.font=`${style.boldTitles?'bold ':''}42px sans-serif`;ctx.fillText(`ACTweather ${page===0?'氣象預報':'海象與航空預報'} ${page+1}/2`,pad,headerY);
-  ctx.font='26px sans-serif';ctx.fillText(`${snapshot.point.name}　預報時間：${clock(snapshot.timestamp,snapshot.offset,true)} LST ／ ${clock(snapshot.timestamp,0,true)} UTC`,pad,headerY+46,width-pad*2);
+  ctx.fillStyle=style.textColor;ctx.font=`${style.boldTitles?'bold ':''}42px sans-serif`;ctx.fillText(t(`ACTweather ${page===0?'氣象預報':'海象與航空預報'} ${page+1}/2`),pad,headerY);
+  ctx.font='26px sans-serif';ctx.fillText(t(`${snapshot.point.name}　預報時間：${clock(snapshot.timestamp,snapshot.offset,true)} LST ／ ${clock(snapshot.timestamp,0,true)} UTC`),pad,headerY+46,width-pad*2);
   const leftW=1160-(pad-44),gap=30,tileW=(leftW-gap)/2,bottom=height-footerSpace,tileH=(bottom-top-gap)/2;
   for(let i=0;i<4;i++){
    const item=capture.images[page*4+i],x=pad+(i%2)*(tileW+gap),y=top+Math.floor(i/2)*(tileH+gap),mapAreaH=tileH-160;
@@ -52,13 +53,13 @@ export async function composeCards(snapshot,capture,{document:doc=globalThis.doc
    for(const lat of [north,(north+south)/2,south]){ctx.textAlign=lat===north?'right':lat===south?'left':'center';const py=iy+(merc(north)-merc(lat))/(merc(north)-merc(south))*h;ctx.save();ctx.translate(ix-16,py);ctx.rotate(-Math.PI/2);ctx.fillText(coordinateLabel(lat,true),0,0);ctx.restore();ctx.save();ctx.translate(ix+w+29,py);ctx.rotate(-Math.PI/2);ctx.fillText(coordinateLabel(lat,true),0,0);ctx.restore();}
    const px=ix+(snapshot.point.lon-west)/(east-west)*w,py=iy+(merc(north)-merc(snapshot.point.lat))/(merc(north)-merc(south))*h;
    ctx.beginPath();ctx.arc(px,py,9,0,Math.PI*2);ctx.fillStyle='#ff334f';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.stroke();
-   ctx.textAlign='center';ctx.fillStyle=style.textColor;ctx.font=`${style.boldTitles?'bold ':''}29px sans-serif`;ctx.fillText(item.label,x+tileW/2,y+mapAreaH+30);
-   ctx.font='19px sans-serif';ctx.fillText(item.sourceModel+' · '+clock(item.timestamp,0,true)+' UTC',x+tileW/2,y+mapAreaH+59);ctx.textAlign='left';drawLegend(ctx,item.legend,x,y+mapAreaH+77,tileW);
+   ctx.textAlign='center';ctx.fillStyle=style.textColor;ctx.font=`${style.boldTitles?'bold ':''}29px sans-serif`;ctx.fillText(t(item.label),x+tileW/2,y+mapAreaH+30);
+   ctx.font='19px sans-serif';ctx.fillText(item.sourceModel+' · '+clock(item.timestamp,0,true)+' UTC',x+tileW/2,y+mapAreaH+59);ctx.textAlign='left';drawLegend(ctx,{...item.legend,labels:item.legend.labels.map(t)},x,y+mapAreaH+77,tileW);
   }
   const textEnd=drawTextRows(ctx,rows[page],rightX,top,style.textColor);
   if(note.length){ctx.font=`${style.noteStyle==='normal'?'':style.noteStyle+' '}${style.noteSize}px sans-serif`;ctx.fillStyle=style.noteColor;let ny=style.notePosition==='top'?headerY+81:style.notePosition==='right'?textEnd+30:height-footerSpace+25;const nx=style.notePosition==='right'?rightX:pad;for(const row of note){ctx.fillText(row,nx,ny+style.noteSize);ny+=Math.ceil(style.noteSize*1.35);}}
   ctx.font='20px sans-serif';ctx.fillStyle=style.textColor;ctx.fillText(`Windy.com　© OpenStreetMap contributors　|　${capture.attribution||'Windy.com'}`.slice(0,160),pad,height-pad-40,width-pad*2);
-  ctx.fillText(`經度 ${capture.bounds[0][0].toFixed(3)}°～${capture.bounds[1][0].toFixed(3)}°　緯度 ${capture.bounds[0][1].toFixed(3)}°～${capture.bounds[1][1].toFixed(3)}°　|　FORECAST 模式預報`,pad,height-pad-10,width-pad*2);
+  ctx.fillText(t(`經度 ${capture.bounds[0][0].toFixed(3)}°～${capture.bounds[1][0].toFixed(3)}°　緯度 ${capture.bounds[0][1].toFixed(3)}°～${capture.bounds[1][1].toFixed(3)}°　|　FORECAST 模式預報`),pad,height-pad-10,width-pad*2);
   if(style.border!=='none'){ctx.strokeStyle=style.borderColor;ctx.lineWidth=style.borderWidth;ctx.setLineDash(style.border==='dashed'?[24,14]:style.border==='dotted'?[style.borderWidth,style.borderWidth*2]:[]);const inset=style.borderWidth*2;ctx.strokeRect(inset,inset,width-inset*2,height-inset*2);if(style.border==='double'){ctx.lineWidth=Math.max(1,style.borderWidth/3);ctx.strokeRect(inset+style.borderWidth*2,inset+style.borderWidth*2,width-inset*2-style.borderWidth*4,height-inset*2-style.borderWidth*4);}ctx.setLineDash([]);}
   const blob=await blobOf(canvas);result.push({blob,name:names.images[page],width,height});canvas.width=canvas.height=1;
  }}finally{for(const item of capture.images)item.canvas.width=item.canvas.height=1;}

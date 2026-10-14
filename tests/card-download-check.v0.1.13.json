@@ -1,0 +1,85 @@
+{
+  "passed": true,
+  "input": "Uploaded reference screenshots, not a fresh Windy capture",
+  "checks": [
+    {
+      "mode": "desktop",
+      "width": 2400,
+      "height": 1700,
+      "pngBytes": [
+        1278301,
+        1649980
+      ],
+      "saved": [
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_兩張預報圖卡.zip",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_01_氣象.png",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_02_海象電碼.png"
+      ],
+      "shareFiles": 2
+    },
+    {
+      "mode": "mobile",
+      "width": 2400,
+      "height": 1700,
+      "pngBytes": [
+        1278301,
+        1649980
+      ],
+      "saved": [
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_兩張預報圖卡.zip",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_01_氣象.png",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_02_海象電碼.png"
+      ],
+      "shareFiles": 2
+    },
+    {
+      "mode": "english",
+      "width": 2400,
+      "height": 1700,
+      "pngBytes": [
+        1310018,
+        1686779
+      ],
+      "saved": [
+        "ACTweather_CWA Taipei Weather Station_202610060300UTC_Forecast_Cards.zip",
+        "ACTweather_CWA Taipei Weather Station_202610060300UTC_01_Weather.png",
+        "ACTweather_CWA Taipei Weather Station_202610060300UTC_02_Marine_METAR.png"
+      ],
+      "shareFiles": 2
+    },
+    {
+      "mode": "styled",
+      "width": 2400,
+      "height": 1999,
+      "pngBytes": [
+        1478629,
+        1925220
+      ],
+      "saved": [
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_兩張預報圖卡.zip",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_01_氣象.png",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_02_海象電碼.png"
+      ],
+      "shareFiles": 2
+    },
+    {
+      "mode": "transparent",
+      "width": 2400,
+      "height": 1700,
+      "pngBytes": [
+        1184717,
+        1523125
+      ],
+      "saved": [
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_兩張預報圖卡.zip",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_01_氣象.png",
+        "ACTweather_中央氣象署 臺北測站_202610060300UTC_02_海象電碼.png"
+      ],
+      "shareFiles": 2
+    },
+    {
+      "mode": "cancel",
+      "cancelled": true
+    }
+  ]
+}
