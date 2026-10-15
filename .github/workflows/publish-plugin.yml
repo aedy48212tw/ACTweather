@@ -1,11 +1,29 @@
-# Adapted from windycom/windy-plugin-template publishing workflow (2026-10-13).
 name: publish-plugin
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['package.json']
 permissions:
   contents: read
 jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      publish: ${{ steps.version.outputs.publish }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Check release version
+        id: version
+        run: node scripts/check-release-version.mjs
   publish-plugin:
+    needs: check-version
+    if: needs.check-version.outputs.publish == 'true'
     runs-on: ubuntu-latest
     env:
       WINDY_API_KEY: '${{ secrets.WINDY_API_KEY }}'
@@ -35,4 +53,5 @@ jobs:
           fi
           curl -sS --fail-with-body -X POST 'https://node.windy.com/plugins/v1.0/upload' \
             -H "x-windy-api-key: ${WINDY_API_KEY}" \
-            -F 'plugin_archive=@plugin.tar'
+            -F 'plugin_archive=@plugin.tar' | tee publish-response.txt
+          node scripts/publish-summary.mjs

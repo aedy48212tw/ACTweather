@@ -1,5 +1,15 @@
 // Translate application-owned text only. User values remain verbatim.
 const pairs=`
+正在切換Windy圖層|Switching Windy layer
+無法切換圖層|Unable to switch layer
+Windy目前未提供此產品或可用模式|This Windy product or a compatible model is unavailable
+所選時間超出此產品可用範圍|Selected time is outside this product's range
+此模式不支援所選產品或高度層|This model does not support the selected product or level
+Windy調整了預報時間，請更換時段|Windy adjusted the forecast time; choose another period
+圖層切換逾時，正在復原原設定|Layer switch timed out; restoring original settings
+圖層切換已取消|Layer switch cancelled
+圖層正在切換，請稍候|Layer switch in progress; please wait
+
 喜愛風格儲存空間被其他視窗占用|Favorite style storage is in use by another window
 喜愛風格底圖資料無效或過大|Favorite background is invalid or too large
 喜愛風格儲存空間開啟逾時|Opening favorite style storage timed out
@@ -267,7 +277,7 @@ LST地方時|LST local time
 輕度|Light
 強|Severe
 備註|Note
-此擴充套件由航空技術學院 陳智羿老師開發，歡迎大家多加使用！預報內容以 Windy 預報為主，本人僅負責使用介面開發。如有任何建議，或想要擴充的功能，歡迎寄信至 |Developed by instructor Chen Chih-Yi of the Aviation Technology Academy. Everyone is welcome to use it! Forecasts are provided by Windy; the author develops the user interface. For suggestions or feature requests, email 
+此擴充套件由航空技術學院 陳智羿老師開發，歡迎大家多加使用！預報內容以 Windy 預報為主，本人僅負責使用介面開發。如有任何建議，或想要擴充的功能，歡迎寄信至 |Developed by instructor Chen Chih-Yi of the Air Force Institute of Technology. Everyone is welcome to use it! Forecasts are provided by Windy; the author develops the user interface. For suggestions or feature requests, email 
 ，一起為氣象預報盡一份力！|. Let's contribute to weather forecasting together!
 氣象預報、能見度、結冰高度、亂流與海象：Windy。單點資料以背景讀取；下載圖卡時暫時切換圖層，完成後復原。|Weather, visibility, freezing level, turbulence and marine data: Windy. Point data load in the background. Card capture temporarily switches map layers and restores them afterwards.
 日出／日沒、月出／月沒與月照：SunCalc 天文估算；地名搜尋：Open-Meteo／GeoNames。|Sunrise, sunset, moonrise, moonset and illumination: SunCalc astronomical calculations. Place search: Open-Meteo / GeoNames.

@@ -10,10 +10,14 @@ globalThis.W={overlays:{},renderLegend:{getGradientLegendHTML:()=>{throw Error("
 globalThis.L={marker:()=>({addTo(){return this;},remove(){}})};
 const {default:Plugin,__pluginConfig}=await import('../dist/plugin.js');const plugin=new Plugin({target:document.querySelector('main')});
 try{
-for(let i=0;i<200&&!document.body.textContent.includes('15.3公里');i++)await new Promise(r=>setTimeout(r,10));assert.equal(values.overlay,'wind');assert.equal(values.level,'850h');assert.equal(downloads,3);assert.equal(__pluginConfig.version,'0.1.13');assert.match(document.body.textContent,/15.3公里/);assert.equal(document.querySelector('[data-action=visibility]'),null);
+for(let i=0;i<200&&!document.body.textContent.includes('15.3公里');i++)await new Promise(r=>setTimeout(r,10));assert.equal(values.overlay,'wind');assert.equal(values.level,'850h');assert.equal(downloads,3);assert.equal(__pluginConfig.version,'0.1.14');assert.match(document.body.textContent,/15.3公里/);assert.equal(document.querySelector('[data-action=visibility]'),null);
 for(const overlay of ['rain','rh','satellite','radar']){values.overlay=overlay;if(['satellite','radar'].includes(overlay)){values.product=overlay;store.emit('product');}store.emit('overlay');broadcast.emit('redrawFinished');await new Promise(r=>setTimeout(r,140));assert.equal(values.overlay,overlay);assert.match(document.body.textContent,/15.3公里/);}
 const click=[...events.get('click:windy-plugin-actweather')][0];click({lat:22,lon:120});await new Promise(r=>setTimeout(r,180));assert.match(document.body.textContent,/22.0000000, 120.0000000/);assert.ok(calls>=2);
 document.querySelector('[data-tab="1"]').click();await new Promise(r=>setTimeout(r,100));assert.match(document.body.textContent,/有效波高 2.0 m/);assert.match(document.body.textContent,/流向西南方（225°）/);assert.equal(values.overlay,'radar');assert.equal(values.level,'850h');document.querySelector('[data-tab="2"]').click();assert.match(document.body.textContent,/FORECAST METAR \/\/\/\/ 060300Z/);assert.match(document.body.textContent,/9999/);
 values.timestamp=Date.parse('2026-10-07T12:00Z');store.emit('timestamp');await new Promise(r=>setTimeout(r,100));assert.match(document.body.textContent,/2026-10-07 20:00\(LST地方時\)；2026-10-07 12:00 \(UTC\)/);assert.match(document.body.textContent,/9999/);assert.equal(values.overlay,'radar');assert.equal(values.product,'radar');assert.equal(values.level,'850h');
+document.querySelector('[data-tab="0"]').click();
+store.set=async(k,v)=>{values[k]=v;store.emit(k);};W.products.ecmwf.overlays.push('temp','rain','rh');
+for(const [key,overlay,level] of [['降雨','rain','surface'],['氣溫','temp','surface'],['雲量分布','rh','925h']]){document.querySelector(`[data-field="${key}"]`).click();await new Promise(r=>setTimeout(r,80));assert.equal(values.overlay,overlay);assert.equal(values.level,level);assert.equal(values.timestamp,Date.parse('2026-10-07T12:00Z'));}
+const before={...values};document.querySelector('[data-field="日出／日沒"]').click();await new Promise(r=>setTimeout(r,40));assert.match(document.body.textContent,/SunCalc 天文估算/);assert.deepEqual(values,before);
 }finally{plugin.$destroy();}assert.equal(events.size,0);
 });

@@ -1,6 +1,5 @@
 {
-  "version": "0.1.13",
+  "version": "0.1.14",
   "passed": true,
-  "mode": "local metadata and archive check only; not uploaded",
-  "repository": "https://github.com/aedy48212tw/ACTweather"
+  "scope": "local prepare-publish metadata and tar; no external upload"
 }

@@ -1,0 +1,14 @@
+✔ release validation catches missing, modified and path-traversal files before copying (5.82045ms)
+✔ updater replaces release files with recoverable backup while preserving git metadata and actual screenshot (6.388979ms)
+✔ updater refuses unrelated remote repositories (0.274457ms)
+✔ CI publication triggers only when version changes, with manual dispatch retained (219.050128ms)
+✔ publish summary extracts only actual official plugin URL from response (50.509994ms)
+✔ full update command copies commits and pushes a local test repository without contacting GitHub (216.653897ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 582.896175

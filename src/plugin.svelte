@@ -7,6 +7,7 @@
  import { singleclick } from '@windy/singleclick';
  import { getPointForecastData, getElevation } from '@windy/fetch';
  import { map } from '@windy/map';
+ import {createFieldNavigator} from './field-products.mjs';
  import {createWindyCapture} from './map-capture.mjs';
  import { mountACT } from './app.mjs';
  import config from './pluginConfig';
@@ -24,7 +25,7 @@
  import {createForecastModelSelector,visibilityModel} from './model-selection.mjs';
  import {browserOffsetSeconds} from './time.mjs';
  import {searchPlaces} from './locations.mjs';
- let root, app, marker, visibilityReader, tileLoader, dataAPI, captureAPI;
+ let root, app, marker, visibilityReader, tileLoader, dataAPI, captureAPI, fieldNavigator;
  const num=()=>Number(store.get('timestamp'));
  export const onopen = params => { if(app&&params?.lat!=null&&params?.lon!=null)app.select({lat:Number(params.lat),lon:Number(params.lon)}); };
  onMount(()=>{try{
@@ -34,7 +35,8 @@
  dataAPI=createIndependentDataAPI({getElevation,createFullRenderingParams,getDataZoom,loadTile:tileLoader.loadTile,mapZoom:()=>map.getZoom()},products);
  const forecastModel=createForecastModelSelector(store,airPointProducts);
  captureAPI=createWindyCapture({store,bcast,map,products,legendAPI:{overlays,getGradientLegendHTML}});
- app=mountACT(root,{capture:captureAPI,
+ fieldNavigator=createFieldNavigator({store,products});
+ app=mountACT(root,{capture:captureAPI,layers:fieldNavigator,
   field:(layer,model,point,ts)=>dataAPI.read(layer,layer==='waves'?['ecmwfWaves','gfsWaves']:layer==='currents'?['cmems']:layer==='sst'?['ecmwfAnalysis']:[model,'ecmwf','gfs'],point,ts),
   search:searchPlaces, visibility:async(model,point,timestamp)=>{const sourceModel=visibilityModel(model,products);return {value:await visibilityReader.read(sourceModel,point,timestamp),sourceModel};},
   timeOffset:browserOffsetSeconds,
@@ -44,7 +46,7 @@
   mark:point=>{if(marker)marker.remove();marker=L.marker([point.lat,point.lon]).addTo(map);},
   subscribe:handlers=>{const click=p=>handlers.point({lat:Number(p.lat),lon:Number(p.lon??p.lng)});singleclick.on(config.name,click);store.on('timestamp',handlers.time);store.on('product',handlers.model);store.on('overlay',handlers.visibility);bcast.on('redrawFinished',handlers.redraw);return()=>{singleclick.off(config.name,click);store.off('timestamp',handlers.time);store.off('product',handlers.model);store.off('overlay',handlers.visibility);bcast.off('redrawFinished',handlers.redraw);if(marker)marker.remove();};}
  });}catch(error){console.error('[ACTweather] 啟動失敗',error);root.textContent='ACTweather 啟動失敗：'+(error?.message??String(error));root.setAttribute('role','alert');}});
- onDestroy(()=>{captureAPI?.destroy();dataAPI?.destroy();visibilityReader?.destroy();tileLoader?.destroy();app?.destroy();});
+ onDestroy(()=>{fieldNavigator?.destroy();captureAPI?.destroy();dataAPI?.destroy();visibilityReader?.destroy();tileLoader?.destroy();app?.destroy();});
 </script>
 <style lang="less">
  :global(.actweather){--bg:#373b40;--fg:#f5f7fa;--muted:#c5cbd4;--card:#44494f;--line:#60666e;--accent:#7cdbef;background:var(--bg);color:var(--fg);padding:20px;font:15px/1.6 system-ui,sans-serif;border-radius:12px;}
@@ -74,4 +76,5 @@
  :global(.actweather [data-card-results] a){color:var(--accent);display:inline-block;margin:10px;}
  :global(.actweather [role=alert]){color:#fb847c;}
 :global(.actweather .act-language-row){display:flex;align-items:center;flex-wrap:wrap;gap:8px}:global(.actweather .act-language){font-size:12px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}:global(.actweather .act-language input){width:auto}
+:global(.actweather .act-field-link){display:inline;border:0;background:transparent;color:inherit;padding:0;border-radius:0;font:inherit;text-align:left;text-decoration:underline dotted;text-underline-offset:4px;cursor:pointer}:global(.actweather .act-field-link:focus-visible){outline:2px solid var(--accent);outline-offset:4px}:global(.actweather .act-field-link:disabled){cursor:wait;opacity:.6}
 </style>

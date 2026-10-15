@@ -1,6 +1,6 @@
 {
   "name": "windy-plugin-actweather",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "ACTweather single point forecast",
   "main": "dist/plugin.min.js",
   "type": "module",
