@@ -1,1 +1,3 @@
 import {spawnSync} from 'node:child_process';import {mkdirSync,rmSync,copyFileSync} from 'node:fs';rmSync('dist',{recursive:true,force:true});mkdirSync('dist');const r=spawnSync(process.execPath,['node_modules/rollup/dist/bin/rollup','-c'],{stdio:'inherit',env:{...process.env,SERVE:'false'}});if(r.status)process.exit(r.status);copyFileSync('package.json','dist/package.json');
+copyFileSync('src/screenshot.jpg', 'dist/screenshot.jpg');
+console.log('Copied src/screenshot.jpg to dist/screenshot.jpg');
