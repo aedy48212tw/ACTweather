@@ -47,6 +47,7 @@ jobs:
           tar -cf plugin.tar -C dist .
       - name: Publish Plugin
         run: |
+          set -o pipefail
           if [ -z "$WINDY_API_KEY" ]; then
             echo "Secret WINDY_API_KEY is not configured" >&2
             exit 1
